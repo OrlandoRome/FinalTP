@@ -5,15 +5,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -81,9 +80,11 @@ fun WallpaperScreen(
                 CircularProgressIndicator()
             }
         } else {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2), // Dos columnas
-                contentPadding = PaddingValues(8.dp) // Espaciado alrededor de la grilla
+            LazyVerticalStaggeredGrid(
+                columns = StaggeredGridCells.Adaptive(300.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalItemSpacing = 12.dp,
+                modifier = Modifier.fillMaxSize()
             ) {
                 items(listaWallpappers) { wallpaper ->
                     WallpaperItem(
@@ -103,22 +104,19 @@ fun WallpaperScreen(
 fun WallpaperItem(wallpaper: WallpaperModel, onClick: (WallpaperModel) -> Unit) {
     Card(
         modifier = Modifier
-            .padding(4.dp)
-            .fillMaxWidth()
             .clickable {
                 onClick(wallpaper)
-                       }, // Hace que la tarjeta sea clickeable
-        shape = RoundedCornerShape(12.dp),
+            },
+        shape = RoundedCornerShape(5.dp),
         elevation = CardDefaults.elevatedCardElevation(4.dp)
     ) {
         Image(
-            painter = rememberAsyncImagePainter(wallpaper.thumbs.large),
-            contentDescription = wallpaper.category,
+            painter = rememberAsyncImagePainter(wallpaper.thumbs.original),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
             modifier = Modifier
-                .aspectRatio(1f) // Mantiene la relación de aspecto
-                .fillMaxWidth() // Llenatodo el ancho
-                .padding(0.dp), // Elimina cualquier relleno adicional
-            contentScale = ContentScale.Crop
+                .fillMaxHeight()
+                .aspectRatio(wallpaper.ratio.toFloat())
         )
     }
 }

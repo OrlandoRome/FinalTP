@@ -16,7 +16,7 @@ fun WallpaperView(wallpaperViewModel: WallpaperViewModel = viewModel(), scrollBe
     scrollBehavior.state.heightOffset = 0f
     val picture = wallpaperViewModel.selectedWallpaper!!
         Image(
-            painter = rememberAsyncImagePainter(picture.thumbs.large),
+            painter = rememberAsyncImagePainter(picture.path),
             contentDescription = picture.category,
             modifier = Modifier
                 .fillMaxSize() // Let the Image take all the available space

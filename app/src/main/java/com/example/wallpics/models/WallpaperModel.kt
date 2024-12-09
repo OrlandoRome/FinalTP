@@ -2,26 +2,32 @@ package com.example.wallpics.models
 
 import com.google.gson.annotations.SerializedName
 
-data class WallpaperModel (
+data class WallpaperModel(
     @SerializedName("id")
-    var id:String,
+    var id: String,
     @SerializedName("url")
-    var url:String,
+    var url: String,
     @SerializedName("short_url")
-    var short_url:String,
+    var short_url: String,
     @SerializedName("category")
-    var category:String,
+    var category: String,
     @SerializedName("file_size")
-    var file_size:String,
+    var file_size: String,
     @SerializedName("file_type")
     var file_type: String,
     @SerializedName("purity")
     var purity: String,
-    var created_at:String,
-    var resolution:String,
-    var favorites:String,
+    var created_at: String,
+    var resolution: String,
+    var favorites: String,
     @SerializedName("thumbs")
-    var thumbs: Thumbs
+    var thumbs: Thumbs,
+    var ratio: String,
+    @SerializedName("dimension_x")
+    var dimensionX: Number,
+    @SerializedName("dimension_y")
+    var dimensionY: Number,
+    var path: String,
 )
 
 data class Thumbs(
