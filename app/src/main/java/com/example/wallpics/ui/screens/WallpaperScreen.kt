@@ -3,6 +3,7 @@ package com.example.wallpics.ui.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,7 +44,7 @@ import com.example.wallpics.models.WallpaperViewModel
 import com.example.wallpics.R
 
 @Composable
-fun WallpaperScreen(wallpaperViewModel: WallpaperViewModel = viewModel()){
+fun WallpaperScreen(wallpaperViewModel: WallpaperViewModel = viewModel(), innerPadding: PaddingValues){
     val listaWallpappers = wallpaperViewModel.imageList.value
 
     // función para obtener los wallpapers
@@ -56,20 +58,8 @@ fun WallpaperScreen(wallpaperViewModel: WallpaperViewModel = viewModel()){
             .fillMaxSize()
             .padding(0.dp), // Añadir padding alrededor
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center
+        verticalArrangement = Arrangement.Center
     ) {
-        Text(
-            text = stringResource(id = R.string.app_name),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 30.dp),
-            color = Color.Black,
-            fontWeight = FontWeight.SemiBold,
-            letterSpacing = 1.5.sp,
-            style = androidx.compose.material3.MaterialTheme.typography.displayMedium,
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center // Centra el texto horizontalmente
-        )
-
         Card(
             modifier = Modifier
                 .padding(top = 20.dp, bottom = 20.dp)
@@ -82,9 +72,9 @@ fun WallpaperScreen(wallpaperViewModel: WallpaperViewModel = viewModel()){
                 text = "Úlimos añadidos",
                 modifier = Modifier
                     .padding(10.dp),
-                color = Color.Gray,
+                color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.SemiBold,
-                style =  androidx.compose.material3.MaterialTheme.typography.bodyMedium,
+                style =  MaterialTheme.typography.bodyMedium,
             )
         }
 
