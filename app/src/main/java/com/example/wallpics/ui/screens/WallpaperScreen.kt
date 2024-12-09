@@ -1,18 +1,15 @@
 package com.example.wallpics.ui.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -27,24 +24,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.example.wallpics.constans.constantes
 import com.example.wallpics.models.WallpaperModel
 import com.example.wallpics.models.WallpaperViewModel
-import com.example.wallpics.R
+import com.example.wallpics.ui.Route
 
 @Composable
-fun WallpaperScreen(wallpaperViewModel: WallpaperViewModel = viewModel(), innerPadding: PaddingValues){
+fun WallpaperScreen(
+    wallpaperViewModel: WallpaperViewModel = viewModel(),
+    navController: NavController
+) {
     val listaWallpappers = wallpaperViewModel.imageList.value
 
     // función para obtener los wallpapers
@@ -53,8 +47,8 @@ fun WallpaperScreen(wallpaperViewModel: WallpaperViewModel = viewModel(), innerP
     }
 
     // Pantalla principal
-    Column (
-        modifier =  Modifier
+    Column(
+        modifier = Modifier
             .fillMaxSize()
             .padding(0.dp), // Añadir padding alrededor
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -74,7 +68,7 @@ fun WallpaperScreen(wallpaperViewModel: WallpaperViewModel = viewModel(), innerP
                     .padding(10.dp),
                 color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.SemiBold,
-                style =  MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyMedium,
             )
         }
 
@@ -92,10 +86,13 @@ fun WallpaperScreen(wallpaperViewModel: WallpaperViewModel = viewModel(), innerP
                 contentPadding = PaddingValues(8.dp) // Espaciado alrededor de la grilla
             ) {
                 items(listaWallpappers) { wallpaper ->
-                    WallpaperItem(wallpaper = wallpaper) { clickedWallpaper ->
-                        // Acción al hacer clic en una imagen
-                        println("Wallpaper clickeado: ${clickedWallpaper.category}")
-                    }
+                    WallpaperItem(
+                        wallpaper = wallpaper,
+                        onClick = {
+                            wallpaperViewModel.selectWallpaper(wallpaper)
+                            navController.navigate(Route.WallpaperView)
+                        },
+                    )
                 }
             }
         }

@@ -14,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wallpics.models.WallpaperViewModel
 import com.example.wallpics.ui.screens.WallpaperScreen
+import com.example.wallpics.ui.screens.WallpaperView
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,7 +24,7 @@ fun WallpicsApp( modifier: Modifier = Modifier, viewModel: WallpicsViewModel = v
     val wallpaperViewModel: WallpaperViewModel = viewModel() // Instancia del ViewModel
 
     val scrollBehavior =
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+        TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -36,10 +37,13 @@ fun WallpicsApp( modifier: Modifier = Modifier, viewModel: WallpicsViewModel = v
             Modifier.padding(innerPadding)
         ) {
             composable<Route.Home> {
-                WallpaperScreen(wallpaperViewModel, innerPadding)
+                WallpaperScreen(wallpaperViewModel, navController)
             } // Pasar el ViewModel de wallpapers
             composable<Route.Favorites> {}
             composable<Route.Profile> {}
+            composable<Route.WallpaperView>{
+                WallpaperView(wallpaperViewModel, scrollBehavior)
+            }
         }
     }
 }

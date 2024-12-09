@@ -10,6 +10,8 @@ class WallpaperViewModel: ViewModel() {
 
     var imageList = mutableStateOf<List<WallpaperModel>>(emptyList()) // La lista de wallpapers
         private set
+    var selectedWallpaper: WallpaperModel? = null
+        private set
 
     // Función para obtener los wallpapers desde la API
     fun getWallpapers(purity: Int) {
@@ -32,5 +34,9 @@ class WallpaperViewModel: ViewModel() {
                 println("Error al cargar las imágenes: ${e.message}")
             }
         }
+    }
+
+    fun selectWallpaper (wallpaper: WallpaperModel) {
+        selectedWallpaper = wallpaper
     }
 }

@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.wallpics.R
+import com.example.wallpics.models.WallpaperModel
 import kotlinx.serialization.Serializable
 
 
@@ -36,6 +37,8 @@ sealed class Route {
     object Favorites : Route()
     @Serializable
     object Profile : Route()
+    @Serializable
+    object WallpaperView : Route()
 }
 
 
