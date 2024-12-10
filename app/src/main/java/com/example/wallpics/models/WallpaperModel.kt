@@ -8,16 +8,17 @@ data class WallpaperModel(
     @SerializedName("url")
     var url: String,
     @SerializedName("short_url")
-    var short_url: String,
+    var shortUrl: String,
     @SerializedName("category")
     var category: String,
     @SerializedName("file_size")
-    var file_size: String,
+    var fileSize: String,
     @SerializedName("file_type")
-    var file_type: String,
+    var fileType: String,
     @SerializedName("purity")
     var purity: String,
-    var created_at: String,
+    @SerializedName("created_at")
+    var createdAt: String,
     var resolution: String,
     var favorites: String,
     @SerializedName("thumbs")
