@@ -53,7 +53,7 @@ fun WallpaperScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(0.dp), // Añadir padding alrededor
+            .padding(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -88,9 +88,9 @@ fun WallpaperScreen(
             }
         } else {
             LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Adaptive(300.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalItemSpacing = 12.dp,
+                columns = StaggeredGridCells.Adaptive(150.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalItemSpacing = 4.dp,
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(listaWallpappers) { wallpaper ->
