@@ -1,5 +1,6 @@
 package com.example.wallpics.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,7 +42,7 @@ fun WallpaperScreen(
     val isDarkTheme = isSystemInDarkTheme()
     // función para obtener los wallpapers
     LaunchedEffect(Unit) {
-        wallpaperViewModel.getWallpapers(purity = 100)
+        wallpaperViewModel.getWallpapers(purity = 100, page = wallpaperViewModel.currentPage++)
     }
 
     // Pantalla principal
@@ -78,6 +79,10 @@ fun WallpaperScreen(
                 wallpaperViewModel.selectWallpaper(it)
                 navController.navigate(Route.WallpaperView)
             },
+            onBottomReached = {
+                Log.d("bottom-reached", wallpaperViewModel.currentPage++.toString())
+                wallpaperViewModel.getWallpapers(purity = 100, page = wallpaperViewModel.currentPage++)
+            }
         )
     }
 }

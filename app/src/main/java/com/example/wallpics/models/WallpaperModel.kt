@@ -39,3 +39,13 @@ data class Thumbs(
     @SerializedName("small")
     var small: String // Miniatura pequeña
 )
+
+data class Meta (
+    @SerializedName("current_page")
+    var currentPage: Int,
+    @SerializedName("last_page")
+    var lastPage: Int,
+    @SerializedName("per_page")
+    var perPage: Int,
+    var total: Int,
+)

@@ -10,7 +10,6 @@ interface WebService {
     @GET("search")
     suspend fun getWallpapers(
         @Query("purity") purity: Int,
+        @Query("page") page: Int,
     ): Response<WallpaperResponse>
-
-
 }
