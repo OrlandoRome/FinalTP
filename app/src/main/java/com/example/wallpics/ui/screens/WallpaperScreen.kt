@@ -2,6 +2,7 @@ package com.example.wallpics.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,9 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.wallpics.models.WallpaperModel
 import com.example.wallpics.models.WallpaperViewModel
 import com.example.wallpics.ui.Route
+import com.example.wallpics.ui.theme.BarraFondoDark
+import com.example.wallpics.ui.theme.DarkColorScheme
+import com.example.wallpics.ui.theme.LightColorScheme
 
 @Composable
 fun WallpaperScreen(
@@ -39,7 +43,7 @@ fun WallpaperScreen(
     navController: NavController
 ) {
     val listaWallpappers = wallpaperViewModel.imageList.value
-
+    val isDarkTheme = isSystemInDarkTheme()
     // función para obtener los wallpapers
     LaunchedEffect(Unit) {
         wallpaperViewModel.getWallpapers(purity = 100)
@@ -51,7 +55,7 @@ fun WallpaperScreen(
             .fillMaxSize()
             .padding(0.dp), // Añadir padding alrededor
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         Card(
             modifier = Modifier
@@ -59,14 +63,17 @@ fun WallpaperScreen(
                 .wrapContentSize() // Ajusta el tamaño de la tarjeta al contenido
                 .padding(horizontal = 30.dp), // Ajusta el padding según sea necesario
             shape = RoundedCornerShape(50), // Hace que la tarjeta sea ovalada
+            colors = CardDefaults.cardColors(
+                containerColor = if (isDarkTheme) DarkColorScheme.primary else BarraFondoDark
+            ),
             elevation = CardDefaults.elevatedCardElevation(4.dp)
         ) {
             Text(
                 text = "Úlimos añadidos",
                 modifier = Modifier
                     .padding(10.dp),
-                color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.SemiBold,
+                color = if (isDarkTheme) LightColorScheme.onPrimary else DarkColorScheme.background,
                 style = MaterialTheme.typography.bodyMedium,
             )
         }
