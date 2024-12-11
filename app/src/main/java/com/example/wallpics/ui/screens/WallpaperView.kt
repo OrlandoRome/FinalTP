@@ -19,7 +19,7 @@ fun WallpaperView(wallpaperViewModel: WallpaperViewModel = viewModel(), scrollBe
             painter = rememberAsyncImagePainter(picture.path),
             contentDescription = picture.category,
             modifier = Modifier
-                .fillMaxSize() // Let the Image take all the available space
+                .fillMaxSize()
             ,
         )
 }

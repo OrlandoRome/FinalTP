@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Person
@@ -50,6 +51,8 @@ sealed class Route {
     object Profile : Route()
     @Serializable
     object WallpaperView : Route()
+    @Serializable
+    object Search: Route()
 }
 
 
@@ -86,7 +89,15 @@ fun TopBar(
             IconButton(onClick = { navController.popBackStack() }) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = ""
+                    contentDescription = "Return to previous screen"
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = { navController.navigate(Route.Search) }) {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "Search a wallpaper"
                 )
             }
         },

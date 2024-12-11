@@ -22,7 +22,6 @@ class WallpaperViewModel: ViewModel() {
         viewModelScope.launch {
             try {
                 val response = retrofitService.webService.getWallpapers(purity, page)
-                Log.d("response-data", response.toString())
                 if (response.isSuccessful) {
                     // Deserializamos el cuerpo de la respuesta como WallpaperResponse
                     val wallpapersResponse = response.body() // Esto es de tipo WallpaperResponse
@@ -47,4 +46,28 @@ class WallpaperViewModel: ViewModel() {
         selectedWallpaper = wallpaper
     }
 
+
+    fun searchByQuery(query: String, purity: Int, page: Int) {
+        viewModelScope.launch {
+            try {
+                val response = retrofitService.webService.searchByQuery(query, purity, page)
+                if (response.isSuccessful) {
+                    // Deserializamos el cuerpo de la respuesta como WallpaperResponse
+                    val wallpapersResponse = response.body() // Esto es de tipo WallpaperResponse
+                    println("Respuesta de la API: $wallpapersResponse")
+                    if (wallpapersResponse != null) {
+                        imageList.value += wallpapersResponse.resultados
+                        currentPage = wallpapersResponse.meta.currentPage
+                        lastPage = wallpapersResponse.meta.lastPage
+                    } else {
+                        println("La respuesta está vacía o nula.")
+                    }
+                } else {
+                    println("Error en la respuesta: ${response.message()}")
+                }
+            } catch (e: Exception) {
+                println("Error al cargar las imágenes: ${e.message}")
+            }
+        }
+    }
 }

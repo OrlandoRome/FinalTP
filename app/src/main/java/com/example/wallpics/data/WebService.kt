@@ -12,4 +12,11 @@ interface WebService {
         @Query("purity") purity: Int,
         @Query("page") page: Int,
     ): Response<WallpaperResponse>
+
+    @GET("search")
+    suspend fun searchByQuery(
+        @Query("q") q: String,
+        @Query("purity") purity: Int,
+        @Query("page") page: Int,
+    ): Response<WallpaperResponse>
 }
