@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 fun WallpaperGrid (
     listaWallpappers: List<WallpaperModel>,
     onWallpaperClick: (WallpaperModel) -> Unit,
+    onWallpaperDoubleClick: (WallpaperModel) -> Unit = {},
     modifier: Modifier = Modifier,
     loadingContent: @Composable () -> Unit = {
         Box(
@@ -61,7 +62,8 @@ fun WallpaperGrid (
             items(listaWallpappers) { wallpaper ->
                 WallpaperItem(
                     wallpaper = wallpaper,
-                    onClick = { onWallpaperClick(wallpaper) }
+                    onClick = { onWallpaperClick(wallpaper) },
+                    onDoubleClick = { onWallpaperDoubleClick(wallpaper) }
                 )
             }
         }

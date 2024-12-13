@@ -1,7 +1,8 @@
 package com.example.wallpics.ui.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,13 +15,15 @@ import androidx.compose.ui.unit.dp
 import com.example.wallpics.models.WallpaperModel
 import coil.compose.rememberAsyncImagePainter
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun WallpaperItem(wallpaper: WallpaperModel, onClick: (WallpaperModel) -> Unit) {
+fun WallpaperItem(wallpaper: WallpaperModel, onClick: (WallpaperModel) -> Unit, onDoubleClick: (WallpaperModel) -> Unit) {
     Card(
         modifier = Modifier
-            .clickable {
-                onClick(wallpaper)
-            },
+            .combinedClickable(
+                onClick = { onClick(wallpaper) },
+                onDoubleClick = { onDoubleClick(wallpaper) }
+            ),
         shape = RoundedCornerShape(5.dp),
         elevation = CardDefaults.elevatedCardElevation(4.dp)
     ) {

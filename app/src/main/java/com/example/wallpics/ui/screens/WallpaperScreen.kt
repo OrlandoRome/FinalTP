@@ -25,7 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.wallpics.models.FavoritesViewModel
 import com.example.wallpics.models.WallpaperViewModel
+import com.example.wallpics.models.toEntity
 import com.example.wallpics.ui.Route
 import com.example.wallpics.ui.components.WallpaperGrid
 import com.example.wallpics.ui.components.WallpaperItem
@@ -36,7 +38,8 @@ import com.example.wallpics.ui.theme.LightColorScheme
 @Composable
 fun WallpaperScreen(
     wallpaperViewModel: WallpaperViewModel = viewModel(),
-    navController: NavController
+    navController: NavController,
+    favoritesViewModel: FavoritesViewModel
 ) {
     val listaWallpappers = wallpaperViewModel.imageList.value
     val isDarkTheme = isSystemInDarkTheme()
@@ -78,6 +81,9 @@ fun WallpaperScreen(
             {
                 wallpaperViewModel.selectWallpaper(it)
                 navController.navigate(Route.WallpaperView)
+            },
+            onWallpaperDoubleClick = { wallpaper ->
+                favoritesViewModel.addFavorite(wallpaper.toEntity())
             },
             onBottomReached = {
                 Log.d("bottom-reached", wallpaperViewModel.currentPage++.toString())
