@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wallpics.models.WallpaperViewModel
+import com.example.wallpics.ui.screens.ProfileScreen
 import com.example.wallpics.ui.screens.Search
 import com.example.wallpics.ui.screens.WallpaperScreen
 import com.example.wallpics.ui.screens.WallpaperView
@@ -49,7 +50,9 @@ fun WallpicsApp( modifier: Modifier = Modifier, viewModel: WallpicsViewModel = v
                 composable<Route.Home> { WallpaperScreen(wallpaperViewModel, navController)
                 } // Pasar el ViewModel de wallpapers
                 composable<Route.Favorites> {}
-                composable<Route.Profile> {}
+                composable<Route.Profile> {
+                    ProfileScreen(wallpaperViewModel, navController)
+                }
                 composable<Route.WallpaperView>{
                     WallpaperView(wallpaperViewModel, scrollBehavior)
                 }
