@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wallpics.models.WallpaperViewModel
+import com.example.wallpics.ui.screens.Download
 import com.example.wallpics.ui.screens.ProfileScreen
 import com.example.wallpics.ui.screens.Search
 import com.example.wallpics.ui.screens.WallpaperScreen
@@ -58,6 +59,9 @@ fun WallpicsApp( modifier: Modifier = Modifier, viewModel: WallpicsViewModel = v
                 }
                 composable<Route.Search> {
                     Search(navController = navController, mainViewModel = wallpaperViewModel)
+                }
+                composable<Route.Download> {
+                    Download(navController = navController, mainViewModel = wallpaperViewModel)
                 }
             }
         }

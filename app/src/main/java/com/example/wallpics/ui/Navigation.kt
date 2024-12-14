@@ -53,6 +53,8 @@ sealed class Route {
     object WallpaperView : Route()
     @Serializable
     object Search: Route()
+    @Serializable
+    object Download: Route()
 }
 
 
@@ -107,7 +109,8 @@ fun TopBar(
 
 
 @Composable
-fun BottomNavigation(
+fun
+        BottomNavigation(
     navController: NavController,
     viewModel: WallpicsViewModel
 ) {
