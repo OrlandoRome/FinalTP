@@ -92,9 +92,9 @@ fun WallpicsApp( modifier: Modifier = Modifier, viewModel: WallpicsViewModel = v
                     composable<Route.Search>{
                         Search(navController = navController, mainViewModel = wallpaperViewModel)
                     }
-                }
-                composable<Route.Download> {
-                    Download(navController = navController, mainViewModel = wallpaperViewModel)
+                    composable<Route.Download> {
+                        Download(navController = navController, mainViewModel = wallpaperViewModel)
+                    }
                 }
             }
     }
