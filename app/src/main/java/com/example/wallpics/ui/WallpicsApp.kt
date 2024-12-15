@@ -85,7 +85,6 @@ fun WallpicsApp( modifier: Modifier = Modifier, viewModel: WallpicsViewModel = v
                             onWallpaperClick = {}
                         )
                     }
-                    composable<Route.Profile> { }
                     composable<Route.WallpaperView>{
                         WallpaperView(wallpaperViewModel, scrollBehavior)
                     }
