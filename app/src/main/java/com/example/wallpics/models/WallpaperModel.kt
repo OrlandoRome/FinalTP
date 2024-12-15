@@ -1,5 +1,6 @@
 package com.example.wallpics.models
 
+import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 
 data class WallpaperModel(
@@ -49,3 +50,17 @@ data class Meta (
     var perPage: Int,
     var total: Int,
 )
+
+// Función de conversión de modelo a entidad
+fun WallpaperModel.toEntity(): WallpaperEntity {
+    val gson = Gson()
+    return WallpaperEntity(
+        id = this.id,
+        shortUrl = this.shortUrl,
+        category = this.category,
+        resolution = this.resolution,
+        ratio = this.ratio,
+        path = this.path,
+        thumbs = gson.toJson(this.thumbs)
+    )
+}

@@ -1,20 +1,14 @@
 package com.example.wallpics.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,10 +19,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.wallpics.models.FavoritesViewModel
 import com.example.wallpics.models.WallpaperViewModel
+import com.example.wallpics.models.toEntity
 import com.example.wallpics.ui.Route
 import com.example.wallpics.ui.components.WallpaperGrid
-import com.example.wallpics.ui.components.WallpaperItem
 import com.example.wallpics.ui.theme.BarraFondoDark
 import com.example.wallpics.ui.theme.DarkColorScheme
 import com.example.wallpics.ui.theme.LightColorScheme
@@ -36,7 +31,8 @@ import com.example.wallpics.ui.theme.LightColorScheme
 @Composable
 fun WallpaperScreen(
     wallpaperViewModel: WallpaperViewModel = viewModel(),
-    navController: NavController
+    navController: NavController,
+    favoritesViewModel: FavoritesViewModel
 ) {
     val listaWallpappers = wallpaperViewModel.imageList.value
     val isDarkTheme = isSystemInDarkTheme()
@@ -79,9 +75,11 @@ fun WallpaperScreen(
                 wallpaperViewModel.selectWallpaper(it)
                 navController.navigate(Route.WallpaperView)
             },
+            onWallpaperDoubleClick = { wallpaper ->
+                favoritesViewModel.addFavorite(wallpaper.toEntity())
+            },
             onBottomReached = {
-                Log.d("bottom-reached", wallpaperViewModel.currentPage++.toString())
-                wallpaperViewModel.getWallpapers(purity = 100, page = wallpaperViewModel.currentPage++)
+                wallpaperViewModel.getWallpapers(purity = 100, page = ++wallpaperViewModel.currentPage)
             }
         )
     }

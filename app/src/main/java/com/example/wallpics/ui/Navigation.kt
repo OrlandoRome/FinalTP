@@ -1,9 +1,10 @@
 package com.example.wallpics.ui
 
+import android.app.Activity
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -16,24 +17,26 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.wallpics.R
-import com.example.wallpics.models.WallpaperModel
 import com.example.wallpics.ui.theme.DarkColorScheme
 import com.example.wallpics.ui.theme.IconoElegidoFondoDark
 import com.example.wallpics.ui.theme.IconosDark
@@ -43,6 +46,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed class Route {
+
     @Serializable
     object Home : Route()
     @Serializable
@@ -52,11 +56,14 @@ sealed class Route {
     @Serializable
     object WallpaperView : Route()
     @Serializable
-    object Search: Route()
+    object Search : Route()
+    @Serializable
+    object Login : Route()
+    @Serializable
+    object Register : Route()
     @Serializable
     object Download: Route()
 }
-
 
 data class TopLevelRoute(
     val name: String,
@@ -77,36 +84,62 @@ fun TopBar(
     viewModel: WallpicsViewModel,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
-    val route = topLevelRoutes.find { it.route == viewModel.currentRoute }
-    CenterAlignedTopAppBar(
-        title = {
-            Text(
-                text = stringResource(id = R.string.app_name).uppercase(),
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.SemiBold,
-                letterSpacing = 1.5.sp,
-            )
-        },
-        navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Return to previous screen"
-                )
-            }
-        },
-        actions = {
-            IconButton(onClick = { navController.navigate(Route.Search) }) {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "Search a wallpaper"
-                )
-            }
-        },
-        scrollBehavior = scrollBehavior
-    )
-}
+    // Estado para la ruta actual
+    val currentRoute = remember { mutableStateOf<String?>(null) }
 
+    // Usamos LaunchedEffect para observar los cambios de la ruta
+    LaunchedEffect(navController) {
+        // Escuchar los cambios de ruta en el NavController
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            val route = destination.route?.substringAfterLast(".") // Obtiene el nombre de la clase
+            currentRoute.value = route
+            Log.d("TopBar", "Ruta actual: ${currentRoute.value}")
+        }
+    }
+
+    // Si currentRoute es null, no mostramos nada o mostramos una vista temporal
+    if (currentRoute.value == null) {
+        Log.d("TopBar", "Esperando la ruta actual...")
+        return // Puedes mostrar una vista de espera o hacer algo mientras se carga la ruta
+    }
+
+    // Condicional para verificar si la ruta actual es Login o Register
+    if (currentRoute.value != Route.Login::class.simpleName && currentRoute.value != Route.Register::class.simpleName) {
+        Log.d("TopBar", "Ruta diferente a Login o Register, mostrando TopAppBar completo.")
+        CenterAlignedTopAppBar(
+            title = {
+                Text(
+                    text = stringResource(id = R.string.app_name).uppercase(),
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.SemiBold,
+                    letterSpacing = 1.5.sp,
+                )
+            },
+            navigationIcon = {
+                val context = LocalContext.current // Obtener contexto composable
+                IconButton(onClick = { if (!navController.popBackStack()) {
+                    // La pila está vacía, salir de la aplicación
+                    (context as? Activity)?.finish()
+                }
+                }) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Return to previous screen"
+                    )
+                }
+            },
+            actions = {
+                IconButton(onClick = { navController.navigate(Route.Search) }) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Search a wallpaper"
+                    )
+                }
+            },
+            scrollBehavior = scrollBehavior
+        )
+    }
+}
 
 @Composable
 fun
@@ -117,6 +150,26 @@ fun
     val isDarkTheme = isSystemInDarkTheme()
     val currentScreen = viewModel.currentRoute
 
+    // Estado para la ruta actual
+    val currentRoute = remember { mutableStateOf<String?>(null) }
+
+    // Usamos LaunchedEffect para observar los cambios de la ruta
+    LaunchedEffect(navController) {
+        // Escuchar los cambios de ruta en el NavController
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            val route = destination.route?.substringAfterLast(".") // Obtiene el nombre de la clase
+            currentRoute.value = route
+            Log.d("TopBar", "Ruta actual: ${currentRoute.value}")
+        }
+    }
+
+    // Si currentRoute es null, no mostramos nada o mostramos una vista temporal
+    if (currentRoute.value == null) {
+        Log.d("TopBar", "Esperando la ruta actual...")
+        return // Puedes mostrar una vista de espera o hacer algo mientras se carga la ruta
+    }
+
+    if (currentRoute.value != Route.Login::class.simpleName && currentRoute.value != Route.Register::class.simpleName) {
     NavigationBar(
         tonalElevation = 16.dp,
         containerColor = if (isDarkTheme) DarkColorScheme.background else LightColorScheme.background
@@ -157,4 +210,5 @@ fun
             )
         }
     }
+}
 }
