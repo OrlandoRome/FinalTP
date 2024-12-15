@@ -1,6 +1,7 @@
 package com.example.wallpics.ui
 
 import FavoritesScreen
+import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,9 +18,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wallpics.data.DatabaseProvider
+import com.example.wallpics.models.AuthViewModel
 import com.example.wallpics.models.FavoritesViewModel
 import com.example.wallpics.models.FavoritesViewModelFactory
 import com.example.wallpics.models.WallpaperViewModel
+import com.example.wallpics.ui.screens.LoginScreen
+import com.example.wallpics.ui.screens.RegisterScreen
 import com.example.wallpics.ui.screens.Search
 import com.example.wallpics.ui.screens.WallpaperScreen
 import com.example.wallpics.ui.screens.WallpaperView
@@ -40,43 +44,52 @@ fun WallpicsApp( modifier: Modifier = Modifier, viewModel: WallpicsViewModel = v
 
     val context = LocalContext.current
     val favoritesDao = DatabaseProvider.getDatabase(context).favoritesDao()
+    val authViewModel: AuthViewModel = viewModel()
     val favoritesViewModel: FavoritesViewModel = viewModel(
         factory = FavoritesViewModelFactory(favoritesDao)
     )
 
-    MaterialTheme (
+    MaterialTheme(
         colorScheme = if (isDarkTheme) DarkColorScheme else LightColorScheme
     ) {
-        Scaffold(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            topBar = { TopBar(navController, viewModel, scrollBehavior) },
-            bottomBar = { BottomNavigation(navController, viewModel) }
-        ) { innerPadding ->
-            NavHost(
-                navController = navController,
-                startDestination = Route.Home,
-                Modifier.padding(innerPadding)
-            ) {
 
-                composable<Route.Home> {
-                    WallpaperScreen(wallpaperViewModel, navController, favoritesViewModel)
-                } // Pasar el ViewModel de wallpapers
-                composable<Route.Favorites> {
-                    FavoritesScreen(
-                        favoritesDao,
-                        navController,
-                        onWallpaperClick = {}
-                    )
-                }
-                composable<Route.Profile> {}
-                composable<Route.WallpaperView>{
-                    WallpaperView(wallpaperViewModel, scrollBehavior)
-                }
-                composable<Route.Search> {
-                    Search(navController = navController, mainViewModel = wallpaperViewModel)
+        Scaffold(
+                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                topBar = {TopBar(navController, viewModel, scrollBehavior)},
+                bottomBar = { BottomNavigation(navController, viewModel) }
+            ) { innerPadding ->
+                NavHost(
+                    navController = navController,
+                    startDestination = Route.Login,
+                    Modifier.padding(innerPadding),
+                ) {
+
+                    composable<Route.Login> {
+                        LoginScreen(navController, authViewModel)
+                    }
+                    composable<Route.Register> {
+                        RegisterScreen(navController, authViewModel)
+                    }
+
+                    composable<Route.Home> {
+                        WallpaperScreen(wallpaperViewModel, navController, favoritesViewModel)
+                    }
+                    composable<Route.Favorites> {
+                        FavoritesScreen(
+                            favoritesDao,
+                            navController,
+                            onWallpaperClick = {}
+                        )
+                    }
+                    composable<Route.Profile> { }
+                    composable<Route.WallpaperView>{
+                        WallpaperView(wallpaperViewModel, scrollBehavior)
+                    }
+                    composable<Route.Search>{
+                        Search(navController = navController, mainViewModel = wallpaperViewModel)
+                    }
                 }
             }
-        }
     }
 }
 
