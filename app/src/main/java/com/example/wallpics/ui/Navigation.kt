@@ -61,6 +61,8 @@ sealed class Route {
     object Login : Route()
     @Serializable
     object Register : Route()
+    @Serializable
+    object Download: Route()
 }
 
 data class TopLevelRoute(
@@ -140,7 +142,8 @@ fun TopBar(
 }
 
 @Composable
-fun BottomNavigation(
+fun
+        BottomNavigation(
     navController: NavController,
     viewModel: WallpicsViewModel
 ) {
