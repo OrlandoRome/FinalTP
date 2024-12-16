@@ -35,7 +35,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.wallpics.R
 import com.example.wallpics.ui.theme.DarkColorScheme
 import com.example.wallpics.ui.theme.IconoElegidoFondoDark
@@ -87,7 +86,7 @@ fun TopBar(
 
     // Usamos LaunchedEffect para observar los cambios de la ruta
     LaunchedEffect(navController) {
-        // Escuchar los cambios de ruta en el NavController
+        // cambios de ruta en el NavController
         navController.addOnDestinationChangedListener { _, destination, _ ->
             val route = destination.route?.substringAfterLast(".") // Obtiene el nombre de la clase
             currentRoute.value = route
@@ -95,10 +94,14 @@ fun TopBar(
         }
     }
 
+    // Verificar si la ruta actual es una de las rutas principales
+    val currentRouteObject = getRouteFromString(currentRoute.value)
+    val isMainRoute = topLevelRoutes.any { it.route == currentRouteObject }
+
     // Si currentRoute es null, no mostramos nada o mostramos una vista temporal
     if (currentRoute.value == null) {
         Log.d("TopBar", "Esperando la ruta actual...")
-        return // Puedes mostrar una vista de espera o hacer algo mientras se carga la ruta
+        return //mostrar una vista de espera o hacer algo mientras se carga la ruta
     }
 
     // Condicional para verificar si la ruta actual es Login o Register
@@ -114,24 +117,30 @@ fun TopBar(
                 )
             },
             navigationIcon = {
-                val context = LocalContext.current // Obtener contexto composable
-                IconButton(onClick = { if (!navController.popBackStack()) {
-                    // La pila está vacía, salir de la aplicación
-                    (context as? Activity)?.finish()
-                }
-                }) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Return to previous screen"
-                    )
+                if (isMainRoute) {
+
+                } else {
+                    val context = LocalContext.current
+                    IconButton(onClick = {
+                        if (!navController.popBackStack()) {
+                            (context as? Activity)?.finish()
+                        }
+                    }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Volver"
+                        )
+                    }
                 }
             },
             actions = {
-                IconButton(onClick = { navController.navigate(Route.Search) }) {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Search a wallpaper"
-                    )
+                if(currentRoute.value == Route.Home::class.simpleName){
+                    IconButton(onClick = { navController.navigate(Route.Search) }) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Busca un wallpaper"
+                        )
+                    }
                 }
             },
             scrollBehavior = scrollBehavior
@@ -150,9 +159,7 @@ fun BottomNavigation(
     // Estado para la ruta actual
     val currentRoute = remember { mutableStateOf<String?>(null) }
 
-    // Usamos LaunchedEffect para observar los cambios de la ruta
     LaunchedEffect(navController) {
-        // Escuchar los cambios de ruta en el NavController
         navController.addOnDestinationChangedListener { _, destination, _ ->
             val route = destination.route?.substringAfterLast(".") // Obtiene el nombre de la clase
             currentRoute.value = route
@@ -160,13 +167,13 @@ fun BottomNavigation(
         }
     }
 
-    // Si currentRoute es null, no mostramos nada o mostramos una vista temporal
     if (currentRoute.value == null) {
         Log.d("TopBar", "Esperando la ruta actual...")
-        return // Puedes mostrar una vista de espera o hacer algo mientras se carga la ruta
+        return
     }
 
-    if (currentRoute.value != Route.Login::class.simpleName && currentRoute.value != Route.Register::class.simpleName) {
+    if (currentRoute.value != Route.Login::class.simpleName && currentRoute.value != Route.Register::class.simpleName
+        && currentRoute.value != Route.WallpaperView::class.simpleName && currentRoute.value != Route.Search::class.simpleName) {
     NavigationBar(
         tonalElevation = 16.dp,
         containerColor = if (isDarkTheme) DarkColorScheme.background else LightColorScheme.background
@@ -191,7 +198,7 @@ fun BottomNavigation(
                                 },
                                 shape = CircleShape
                             )
-                            .padding(12.dp) // Padding inside the circle
+                            .padding(12.dp)
                     ) {
                         Icon(
                             imageVector = item.icon,
@@ -208,4 +215,17 @@ fun BottomNavigation(
         }
     }
 }
+}
+
+fun getRouteFromString(routeName: String?): Route? {
+    return when (routeName) {
+        Route.Home::class.simpleName -> Route.Home
+        Route.Favorites::class.simpleName -> Route.Favorites
+        Route.Profile::class.simpleName -> Route.Profile
+        Route.WallpaperView::class.simpleName -> Route.WallpaperView
+        Route.Search::class.simpleName -> Route.Search
+        Route.Login::class.simpleName -> Route.Login
+        Route.Register::class.simpleName -> Route.Register
+        else -> null
+    }
 }

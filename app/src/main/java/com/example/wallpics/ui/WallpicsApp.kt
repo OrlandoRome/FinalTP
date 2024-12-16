@@ -1,7 +1,6 @@
 package com.example.wallpics.ui
 
 import FavoritesScreen
-import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -60,7 +59,7 @@ fun WallpicsApp( modifier: Modifier = Modifier, viewModel: WallpicsViewModel = v
             ) { innerPadding ->
                 NavHost(
                     navController = navController,
-                    startDestination = Route.Login,
+                    startDestination = Route.Home,
                     Modifier.padding(innerPadding),
                 ) {
 
@@ -81,7 +80,7 @@ fun WallpicsApp( modifier: Modifier = Modifier, viewModel: WallpicsViewModel = v
                             onWallpaperClick = {}
                         )
                     }
-                    composable<Route.Profile> { }
+
                     composable<Route.WallpaperView>{
                         WallpaperView(wallpaperViewModel, scrollBehavior)
                     }
