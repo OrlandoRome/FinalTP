@@ -151,8 +151,7 @@ fun TopBar(
 }
 
 @Composable
-fun
-        BottomNavigation(
+fun BottomNavigation(
     navController: NavController,
     viewModel: WallpicsViewModel
 ) {

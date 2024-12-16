@@ -22,7 +22,9 @@ import com.example.wallpics.models.AuthViewModel
 import com.example.wallpics.models.FavoritesViewModel
 import com.example.wallpics.models.FavoritesViewModelFactory
 import com.example.wallpics.models.WallpaperViewModel
+import com.example.wallpics.ui.screens.Download
 import com.example.wallpics.ui.screens.LoginScreen
+import com.example.wallpics.ui.screens.ProfileScreen
 import com.example.wallpics.ui.screens.RegisterScreen
 import com.example.wallpics.ui.screens.Search
 import com.example.wallpics.ui.screens.WallpaperScreen
@@ -81,12 +83,17 @@ fun WallpicsApp( modifier: Modifier = Modifier, viewModel: WallpicsViewModel = v
                             onWallpaperClick = {}
                         )
                     }
-                    composable<Route.Profile> { }
+                    composable<Route.Profile> {
+                        ProfileScreen(wallpaperViewModel, navController)
+                    }
                     composable<Route.WallpaperView>{
                         WallpaperView(wallpaperViewModel, scrollBehavior)
                     }
                     composable<Route.Search>{
                         Search(navController = navController, mainViewModel = wallpaperViewModel)
+                    }
+                    composable<Route.Download> {
+                        Download(navController = navController, mainViewModel = wallpaperViewModel)
                     }
                 }
             }
