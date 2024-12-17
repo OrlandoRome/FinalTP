@@ -19,6 +19,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wallpics.data.DatabaseProvider
 import com.example.wallpics.models.AuthViewModel
+import com.example.wallpics.models.DownloadViewModel
+import com.example.wallpics.models.DownloadsViewModelFactory
 import com.example.wallpics.models.FavoritesViewModel
 import com.example.wallpics.models.FavoritesViewModelFactory
 import com.example.wallpics.models.WallpaperViewModel
@@ -49,6 +51,11 @@ fun WallpicsApp( modifier: Modifier = Modifier, viewModel: WallpicsViewModel = v
     val authViewModel: AuthViewModel = viewModel()
     val favoritesViewModel: FavoritesViewModel = viewModel(
         factory = FavoritesViewModelFactory(favoritesDao)
+    )
+
+    val downloadDao = DatabaseProvider.getDatabase(context).downloadDao()
+    val downloadViewModel: DownloadViewModel = viewModel(
+        factory = DownloadsViewModelFactory(downloadDao)
     )
 
     MaterialTheme(
@@ -86,13 +93,13 @@ fun WallpicsApp( modifier: Modifier = Modifier, viewModel: WallpicsViewModel = v
                         )
                     }
                     composable<Route.WallpaperView>{
-                        WallpaperView(wallpaperViewModel, scrollBehavior)
+                        WallpaperView(wallpaperViewModel, scrollBehavior, downloadViewModel)
                     }
                     composable<Route.Search>{
                         Search(navController = navController, mainViewModel = wallpaperViewModel)
                     }
                     composable<Route.Download> {
-                        Download(navController = navController, mainViewModel = wallpaperViewModel)
+                        Download(downloadDao, navController, onWallpaperClick = {})
                     }
                 }
             }

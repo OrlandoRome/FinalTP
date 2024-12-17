@@ -4,8 +4,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.Create
+import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -17,6 +17,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wallpics.models.WallpaperViewModel
 import coil.compose.rememberAsyncImagePainter
+import com.example.wallpics.models.DownloadViewModel
+import com.example.wallpics.models.toDownloadEntity
 import com.example.wallpics.ui.components.ExpandableFAB
 import com.example.wallpics.ui.components.FABItem
 import com.example.wallpics.utils.AndroidDownloader
@@ -25,7 +27,8 @@ import com.example.wallpics.utils.AndroidDownloader
 @Composable
 fun WallpaperView(
     wallpaperViewModel: WallpaperViewModel = viewModel(),
-    scrollBehavior: TopAppBarScrollBehavior
+    scrollBehavior: TopAppBarScrollBehavior,
+    downloadViewModel: DownloadViewModel
 ) {
     val context = LocalContext.current
     val downloader = remember { AndroidDownloader(context) }
@@ -38,7 +41,7 @@ fun WallpaperView(
             val itemList = listOf(
                 FABItem(icon = Icons.Rounded.Favorite, text = "Add to Favorites"),
                 FABItem(icon = Icons.Rounded.Create, text = "Set Wallpaper"),
-                FABItem(icon = Icons.Rounded.ArrowDropDown, text = "Download"),
+                FABItem(icon = Icons.Rounded.Download, text = "Download"),
             )
             ExpandableFAB(
                 items = itemList,
@@ -46,6 +49,7 @@ fun WallpaperView(
                     when(item.text) {
                         "Download" -> {
                             downloader.downloadFile(picture.path, picture.id)
+                            downloadViewModel.addDownload(picture.toDownloadEntity())
                         }
                         "Set Wallpaper" -> {}
                     }
