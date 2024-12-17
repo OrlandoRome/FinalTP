@@ -35,13 +35,21 @@ fun WallpaperEntity.toModel(): WallpaperModel {
 
 fun DownloadEntity.toModel(): WallpaperModel {
     val gson = Gson()
+
+    fun <T> convertJson(json: String?, clazz: Class<T>, default: T): T {
+        return try {
+            json?.let { gson.fromJson(it, clazz) } ?: default
+        } catch (e: Exception) {
+            default
+        }
+    }
+
     return WallpaperModel(
         id = this.id,
         url = "",
         shortUrl = this.shortUrl,
         category = this.category,
         fileSize = this.fileSize,
-        fileType = "",
         purity = "",
         createdAt = "",
         resolution = this.resolution,
@@ -50,6 +58,8 @@ fun DownloadEntity.toModel(): WallpaperModel {
         ratio = this.ratio,
         dimensionX = 0,
         dimensionY = 0,
-        path = this.path
+        path = this.path,
+        tags = convertJson("", Array<Tag>::class.java, emptyArray<Tag>()).toList(),
+        uploader = convertJson("", Uploader::class.java, Uploader("", "", Avatar("", "", "", "")))
     )
 }

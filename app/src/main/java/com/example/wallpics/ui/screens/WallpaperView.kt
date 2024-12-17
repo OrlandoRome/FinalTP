@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.Create
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Favorite
@@ -73,17 +74,16 @@ fun WallpaperView(
                             downloader.downloadFile(picture.path, picture.id)
                             downloadViewModel.addDownload(picture.toDownloadEntity())
                         }
-
                         "Definir fondo" -> {}
                     }
                 }
             )
         }
-    ) { innerPadding ->
+    ) { innerPadding -> // innerPadding generado por Scaffold
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(0.dp)
+                .padding(innerPadding)
         ) {
             Box(
                 modifier = Modifier
@@ -134,7 +134,7 @@ fun WallpaperView(
                 }
                 Text(
                     text = "Category: ${picture.category ?: "N/A"}",
-                    modifier = Modifier.padding(top = 8.dp) // Espaciado hacia abajo
+                    modifier = Modifier.padding(top = 8.dp)
                 )
             }
         }
