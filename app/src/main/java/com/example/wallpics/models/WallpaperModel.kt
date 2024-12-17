@@ -97,3 +97,18 @@ fun WallpaperModel.toEntity(): WallpaperEntity {
         tags = gson.toJson(this.tags)
     )
 }
+
+// Función de conversión de modelo a entidad
+fun WallpaperModel.toDownloadEntity(): DownloadEntity {
+    val gson = Gson()
+    return DownloadEntity(
+        id = this.id,
+        shortUrl = this.shortUrl,
+        category = this.category,
+        resolution = this.resolution,
+        ratio = this.ratio,
+        path = this.path,
+        thumbs = gson.toJson(this.thumbs),
+        fileSize = this.fileSize
+    )
+}
