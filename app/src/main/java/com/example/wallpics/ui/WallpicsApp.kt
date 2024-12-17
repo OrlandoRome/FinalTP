@@ -25,8 +25,8 @@ import com.example.wallpics.models.FavoritesViewModel
 import com.example.wallpics.models.FavoritesViewModelFactory
 import com.example.wallpics.models.WallpaperViewModel
 import com.example.wallpics.ui.screens.Download
-import com.example.wallpics.ui.screens.ProfileScreen
 import com.example.wallpics.ui.screens.LoginScreen
+import com.example.wallpics.ui.screens.ProfileScreen
 import com.example.wallpics.ui.screens.RegisterScreen
 import com.example.wallpics.ui.screens.Search
 import com.example.wallpics.ui.screens.WallpaperScreen
@@ -69,7 +69,7 @@ fun WallpicsApp( modifier: Modifier = Modifier, viewModel: WallpicsViewModel = v
             ) { innerPadding ->
                 NavHost(
                     navController = navController,
-                    startDestination = Route.Login,
+                    startDestination = Route.Home,
                     Modifier.padding(innerPadding),
                 ) {
 
@@ -79,9 +79,7 @@ fun WallpicsApp( modifier: Modifier = Modifier, viewModel: WallpicsViewModel = v
                     composable<Route.Register> {
                         RegisterScreen(navController, authViewModel)
                     }
-                    composable<Route.Profile> {
-                        ProfileScreen(wallpaperViewModel, navController)
-                    }
+
                     composable<Route.Home> {
                         WallpaperScreen(wallpaperViewModel, navController, favoritesViewModel)
                     }
@@ -92,11 +90,14 @@ fun WallpicsApp( modifier: Modifier = Modifier, viewModel: WallpicsViewModel = v
                             onWallpaperClick = {}
                         )
                     }
+                    composable<Route.Profile> {
+                        ProfileScreen(wallpaperViewModel, navController)
+                    }
                     composable<Route.WallpaperView>{
                         WallpaperView(wallpaperViewModel, scrollBehavior, downloadViewModel)
                     }
                     composable<Route.Search>{
-                        Search(navController = navController, mainViewModel = wallpaperViewModel)
+                        Search(navController = navController, mainViewModel = wallpaperViewModel, favoritesViewModel = favoritesViewModel)
                     }
                     composable<Route.Download> {
                         Download(downloadDao, navController, onWallpaperClick = {})
